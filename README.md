@@ -1,7 +1,16 @@
-# Protobuf IR Project
+# DataLoom
+
+DataLoom weaves together different data representations and business logic across languages and platforms, creating a unified fabric of consistent data models.
+
+Intermediate Representation (IR) is a common language for representing data models and business logic. It's a core component of the DataLoom.
 
 ## Overview
-This project is a part of the Protobuf IR project. It focuses on generating TypeScript modules, Ruby gems, and SQL schemas from protobuf interfaces. The project is designed to provide a comprehensive solution for working with protobuf interfaces in various programming languages and databases (with Snowflake DDL, fivetran, and Tableau support in mind).
+
+This project is heavily inspired by [Morphir](https://github.com/finos/morphir) - albeit at a much smaller and more localized scale.
+
+Encapsulate business logic in a single place and distribute it across different programming languages, teams and applications. This allows for strong data integrity and consistency across the organization.
+
+It focuses on generating TypeScript modules, Ruby gems, and SQL schemas from protobuf interfaces. The project is designed to provide a comprehensive solution for working with protobuf interfaces in various programming languages and databases (with Snowflake DDL, fivetran, and Tableau support in mind).
 
 ## Prerequisites
 
