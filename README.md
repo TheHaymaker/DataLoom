@@ -106,3 +106,20 @@ The generated files will be located in the `generated/data` directory.
 - [ ] Provide a means of publishing the generated TypeScript and Ruby modules to a package registry.
 - [ ] Provide a means to specific a package registry namespace (e.g., `@my-org/my-package`) for the generated modules.
 - [ ] Provide prerequisites and dev environment setup isntructions for Windows and Linux users (only tested on macOS).
+- [ ] Target additional languages
+    - [ ] Scala
+    - [ ] Java
+    - [ ] Rust
+    - [ ] JavaScript?
+    - [ ] C++
+    - [ ] C#
+    - [ ] Python
+    - [ ] GraphQL
+    - [ ] Zig
+    - [ ] Haskell
+    - [ ] Bash?
+    - [ ] Standard Schema?
+    - [ ] Zod?
+    - [ ] JSON Schema
+    - [ ] Prisma?
+    - [ ] TBD
