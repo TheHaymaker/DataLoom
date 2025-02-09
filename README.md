@@ -107,19 +107,30 @@ The generated files will be located in the `generated/data` directory.
 - [ ] Provide a means to specific a package registry namespace (e.g., `@my-org/my-package`) for the generated modules.
 - [ ] Provide prerequisites and dev environment setup isntructions for Windows and Linux users (only tested on macOS).
 - [ ] Target additional languages
-    - [ ] Scala
-    - [ ] Java
-    - [ ] Rust
-    - [ ] JavaScript?
-    - [ ] C++
-    - [ ] C#
-    - [ ] Python
-    - [ ] GraphQL
-    - [ ] Zig
-    - [ ] Haskell
-    - [ ] Bash?
-    - [ ] Standard Schema?
-    - [ ] Zod?
-    - [ ] JSON Schema
-    - [ ] Prisma?
-    - [ ] TBD
+  - [ ] Scala
+  - [ ] Clojure
+  - [ ] Java
+  - [ ] Go
+  - [ ] Rust
+  - [ ] JavaScript?
+  - [ ] PHP
+  - [ ] C
+  - [ ] C++
+  - [ ] C#
+  - [ ] Python
+  - [ ] GraphQL
+  - [ ] Zig
+  - [ ] Haskell
+  - [ ] Bash?
+  - [ ] Lua
+  - [ ] Standard Schema?
+  - [ ] Zod?
+  - [ ] JSON Schema
+  - [ ] Prisma?
+  - [ ] Kotlin
+  - [ ] Dart
+  - [ ] Swift
+  - [ ] Julia
+  - [ ] R
+  - [ ] Elixir
+  - [ ] TB  
