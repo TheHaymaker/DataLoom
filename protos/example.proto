@@ -1,0 +1,50 @@
+
+
+syntax = "proto3";
+
+package business_logic;
+
+import "google/protobuf/timestamp.proto";
+
+
+enum AnalyticsParams {
+  
+  url_params = 0;
+  utm_source = 1;
+  utm_medium = 2;
+  utm_campaign = 3;
+  utm_term = 4;
+  utm_content = 5;
+  gclid = 6;
+  fbclid = 7;
+  msclkid = 8;
+  dclid = 9;
+  ad_id = 10;
+  ad_name = 11;
+  ad_group_id = 12;
+  ad_group_name = 13;
+  gtm_id = 14;
+  gtm_event = 15;
+  gtm_trigger = 16;
+  gtm_variable = 17;
+  gtm_data_layer = 18;
+  gtm_container = 19;
+  gtm_account = 20;
+  gtm_workspace = 21;
+  gtm_version = 22;
+  gtm_environment = 23;
+}
+
+
+message UrlAnalyticsRequest {
+  string url = 1;
+  repeated AnalyticsParams params_to_search = 2;
+}
+
+message UrlAnalyticsResponse {
+  map<string, string> found_params = 1;
+}
+
+service AnalyticsService {
+  rpc SearchUrlParams(UrlAnalyticsRequest) returns (UrlAnalyticsResponse);
+}

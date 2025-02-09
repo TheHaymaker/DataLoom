@@ -1,0 +1,20 @@
+{
+  "name": "protobuf-ir-project",
+  "version": "1.0.0",
+  "description": "A project that translates and generates protobuf interfaces into both TypeScript modules and Ruby gems.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate:ts": "node scripts/generate-ts.js",
+    "generate:ruby": "node scripts/generate-ruby.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "protobufjs": "^6.11.2",
+    "ts-proto": "^2.6.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  }
+}
