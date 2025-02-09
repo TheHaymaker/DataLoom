@@ -1,6 +1,6 @@
 # DataLoom
 
-![DataLoom Logo](https://github.com/TheHaymaker/DataLoom/blob/main/dataloom.png)
+![DataLoom Logo](https://github.com/TheHaymaker/DataLoom/blob/main/dataloom-small.png)
 
 DataLoom weaves together different data representations and business logic across languages and platforms, creating a unified fabric of consistent data models.
 
