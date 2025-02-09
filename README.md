@@ -1,6 +1,7 @@
 # Protobuf IR Project
 
-This project translates and generates protobuf interfaces into both TypeScript modules and Ruby gems (for now - more target outputs to come)
+## Overview
+This project is a part of the Protobuf IR project. It focuses on generating TypeScript modules, Ruby gems, and SQL schemas from protobuf interfaces. The project is designed to provide a comprehensive solution for working with protobuf interfaces in various programming languages and databases (with Snowflake DDL, fivetran, and Tableau support in mind).
 
 ## Prerequisites
 
@@ -66,8 +67,31 @@ npm run generate:ruby
 The generated files will be located in the `generated/ruby` directory.
 
 
+### Generate Data Warehouse Assets
+
+Run the following script to generate data warehouse-friendly formats from the protobuf schema:
+
+```sh
+npm run generate:data
+```
+
+This generates:
+
+1. Snowflake DDL files (`*.snowflake.sql`):
+   - Tables for storing protobuf message data
+   - Flattened views optimized for Tableau
+   - Lookup tables for enum values
+
+2. JSON Schema files (`*.schema.json`):
+   - Fivetran-compatible schemas
+   - Proper type mappings for all fields
+
+The generated files will be located in the `generated/data` directory.
+
+
 ## To Do
 
 - [ ] Provide a way to generate the protobuf schema from the TypeScript and Ruby modules.
 - [ ] Provide a means of publishing the generated TypeScript and Ruby modules to a package registry.
 - [ ] Provide a means to specific a package registry namespace (e.g., `@my-org/my-package`) for the generated modules.
+- [ ] Provide prerequisites and dev environment setup isntructions for Windows and Linux users (only tested on macOS).
