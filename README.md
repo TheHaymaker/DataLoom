@@ -1,5 +1,7 @@
 # DataLoom
 
+![DataLoom Logo](https://github.com/TheHaymaker/DataLoom/blob/main/dataloom.png)
+
 DataLoom weaves together different data representations and business logic across languages and platforms, creating a unified fabric of consistent data models.
 
 Intermediate Representation (IR) is a common language for representing data models and business logic. It's a core component of the DataLoom.
