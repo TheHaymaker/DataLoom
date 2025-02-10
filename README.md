@@ -92,6 +92,10 @@ DataLoom provides two main workflows through its CLI:
 
 This workflow allows you to create sample protobuf files from predefined templates including arrays, functions, objects, schemas, enums, maps, oneofs, nested messages, and various Google protobuf types.
 
+
+https://github.com/user-attachments/assets/34531a3e-ba84-49e7-959a-2897a53e6862
+
+
 ### Convert TypeScript to Protobuf
 
 TBD
