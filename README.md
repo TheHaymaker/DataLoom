@@ -71,7 +71,8 @@ DataLoom tries to empower you to start using the protobuf-as-IR as quickly as po
 
 This workflow allows you to create sample protobuf files from predefined templates. These templates cover common use cases that prioritize the shape, structure and hierarhcy of the data.
 
-https://github.com/user-attachments/assets/34531a3e-ba84-49e7-959a-2897a53e6862
+https://github.com/user-attachments/assets/61d706ca-d890-4944-a2d7-fd36e29be586
+
 
 ## Generate Usable Outputs from Intermediate Representation (IR)
 
