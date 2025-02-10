@@ -15,7 +15,7 @@ try {
   execSync(`protoc \
     --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto \
     --ts_proto_out=${outDir} \
-    --ts_proto_opt=esModuleInterop=true \
+    --ts_proto_opt=esModuleInterop=true,outputJsonMethods=true,useEnumNames=true \
     --proto_path=${protoDir} \
     --proto_path=/opt/homebrew/Cellar/protobuf/29.3/include \
     ${protoDir}/*.proto`,

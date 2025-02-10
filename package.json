@@ -8,6 +8,7 @@
     "generate:ts": "node scripts/generate-ts.js",
     "generate:ruby": "node scripts/generate-ruby.js",
     "generate:data": "node scripts/generate-data.js",
+    "generate:all": "npm run generate:ts && npm run generate:ruby && npm run generate:data",
     "dataloom": "node scripts/cli.js"
   },
   "author": "",

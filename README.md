@@ -6,11 +6,18 @@ DataLoom weaves together different data representations and business logic acros
 
 Intermediate Representation (IR) is a common language for representing data models and business logic. It's a core component of the DataLoom.
 
-Haven't heard of IR before? 
-
-Not sure what a protobuf is or how to map your schemas to a protobuf?
-
-We got you covered. Our CLI docs empower you with sample protobuf defintions for common problems and data structures. The CLI will help guide you and give you the tools to start defining your data models in protobuf format.
+> Haven't heard of IR before?
+>
+> Not sure what a protobuf is or how to map your schemas to a protobuf?
+>
+> We got you covered. Our CLI docs empower you with sample protobuf defintions for common 
+> problems and data structures. The CLI will help guide you and give you the tools to 
+> start defining your data models in protobuf format. Our sample protobuf definitions are 
+> designed to be used as a starting point for your own data models, and they can be 
+> easily adapted to fit your specific needs.
+>
+> We prioritize the shape, structure and hierarchy of the data.
+>
 
 ## Overview
 
@@ -19,6 +26,166 @@ This project is heavily inspired by [Morphir](https://github.com/finos/morphir) 
 Encapsulate business logic in a single place and distribute it across different programming languages, teams and applications. This allows for strong data integrity and consistency across the organization.
 
 It focuses on generating TypeScript modules, Ruby gems, and SQL schemas from protobuf interfaces. The project is designed to provide a comprehensive solution for working with protobuf interfaces in various programming languages and databases (with Snowflake DDL, fivetran, and Tableau support in mind).
+
+## Quick Example
+
+Using an IR representation of a data model, we can generate a variety of outputs, including TypeScript modules, Ruby gems, and SQL schemas.
+
+For instance, we can transform the following protobuf schema:
+
+```protobuf
+syntax = "proto3";
+
+package VisitId;
+
+message VisitIdBusinessLogic {
+  string name = 1;
+  int32 cookieExpiration = 2;
+  bool contains_attribution_query_params = 3;
+  
+  oneof visit_id_source {
+    string visit_id = 4;
+    string cookie_name = 5;  // If provided, the visit_id will be parsed from this cookie
+  }
+  map<string, string> attribution_params = 6;
+}
+
+message AttributionParams {
+  map<string, string> params = 1;
+}
+
+// These are the valid keys for attribution_params
+message AttributionParamKeys {
+  string url_params = 1;
+  string utm_source = 2;
+  string utm_medium = 3;
+  string utm_campaign = 4;
+  string utm_term = 5;
+  string utm_content = 6;
+  string gclid = 7;
+  string fbclid = 8;
+  string msclkid = 9;
+  string dclid = 10;
+  string ad_id = 11;
+  string ad_name = 12;
+  string ad_group_id = 13;
+  string ad_group_name = 14;
+  string gtm_id = 15;
+  string gtm_event = 16;
+  string gtm_trigger = 17;
+  string gtm_variable = 18;
+  string gtm_data_layer = 19;
+  string gtm_container = 20;
+  string gtm_account = 21;
+  string gtm_workspace = 22;
+  string gtm_version = 23;
+  string gtm_environment = 24;
+}
+
+```
+
+Then, we can generate a TypeScript module. When we do this, we get the following TypeScript module:
+
+```ts
+export const protobufPackage = "VisitId";
+
+export interface VisitIdBusinessLogic {
+  name: string;
+  cookieExpiration: number;
+  containsAttributionQueryParams: boolean;
+  visitId?:
+    | string
+    | undefined;
+  /** If provided, the visit_id will be parsed from this cookie */
+  cookieName?: string | undefined;
+  attributionParams: { [key: string]: string };
+}
+
+export interface VisitIdBusinessLogic_AttributionParamsEntry {
+  key: string;
+  value: string;
+}
+
+export interface AttributionParams {
+  params: { [key: string]: string };
+}
+
+export interface AttributionParams_ParamsEntry {
+  key: string;
+  value: string;
+}
+
+/** These are the valid keys for attribution_params */
+export interface AttributionParamKeys {
+  urlParams: string;
+  utmSource: string;
+  utmMedium: string;
+  utmCampaign: string;
+  utmTerm: string;
+  utmContent: string;
+  gclid: string;
+  fbclid: string;
+  msclkid: string;
+  dclid: string;
+  adId: string;
+  adName: string;
+  adGroupId: string;
+  adGroupName: string;
+  gtmId: string;
+  gtmEvent: string;
+  gtmTrigger: string;
+  gtmVariable: string;
+  gtmDataLayer: string;
+  gtmContainer: string;
+  gtmAccount: string;
+  gtmWorkspace: string;
+  gtmVersion: string;
+  gtmEnvironment: string;
+}
+
+function createBaseVisitIdBusinessLogic(): VisitIdBusinessLogic {
+  return {
+    name: "",
+    cookieExpiration: 0,
+    containsAttributionQueryParams: false,
+    visitId: undefined,
+    cookieName: undefined,
+    attributionParams: {},
+  };
+}
+```
+
+When can then be used in a TypeScript application as follows:
+
+```typescript
+import { VisitIdBusinessLogic, AttributionParamKeys } from './generated/ts/visitIdBusinessLogic';
+
+// Create a type for valid attribution param keys
+type AttributionParamKey = keyof AttributionParamKeys;
+
+const visitCookieDetails = VisitIdBusinessLogic.create({
+  attributionParams: {
+    'utm_source': 'kdjflkdjfsl',  // TypeScript will know these are valid keys
+    'utm_medium': 'social'
+  }
+});
+
+// You can also type your params object
+const params: Record<AttributionParamKey, string> = {
+  utm_source: 'kdjflkdjfsl',
+  gcl_test: 'test'  // TypeScript error: 'gcl_test' is not a valid AttributionParamKey
+};
+
+// Access values safely
+const sourceValue = visitCookieDetails.attributionParams['utm_source'];
+```
+
+By leveraging protobuf -- and its mature codegen ecosystem and cross-language support -- we can generate a variety of outputs, including TypeScript modules, Ruby gems, and SQL schemas (and more!) while focusing on the shape, structure and hierarchy of our data models. 
+
+In addition to modeling data, we can also use protobuf to build complex business logic as well.
+
+Example: TBD
+
 
 ## IR Workflow
 
@@ -126,17 +293,9 @@ DataLoom provides two main workflows through its CLI:
 
 ### Create Protobuf Sample
 
-This workflow allows you to create sample protobuf files from predefined templates including arrays, functions, objects, schemas, enums, maps, oneofs, nested messages, and various Google protobuf types.
-
+This workflow allows you to create sample protobuf files from predefined templates. These templates cover common use cases that prioritize the shape, structure and hierarhcy of the data.
 
 https://github.com/user-attachments/assets/34531a3e-ba84-49e7-959a-2897a53e6862
-
-
-### Convert TypeScript to Protobuf
-
-TBD
-
-This workflow converts TypeScript functions into protobuf service definitions, automatically mapping TypeScript types to their protobuf equivalents.
 
 ## Prerequisites
 
@@ -179,6 +338,12 @@ npm install
 
 Run the following script to generate the source code targets from the IR protobuf schema. We use the `protoc` compiler to generate the TypeScript and Ruby code from the protobuf schema. We chose to abstract these bash commands into a Nodee script to make it easier to run and maintain (avoid forcing users to modify local file permissions to make the bash scripts executable, for instance). The node scripts should just work.
 
+
+To generate new targets, run the following script:
+
+```sh
+npm run generate:all
+```
 
 ### Generate TypeScript Modules
 

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sample;
+
+message Comment {
+  string comment_id = 1;
+  string content = 2;
+  
+  // Polymorphic relationship
+  string target_type = 3;  // "post", "image", "product"
+  string target_id = 4;
+  
+  int64 created_at = 5;
+  string created_by = 6;
+}

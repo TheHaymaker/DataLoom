@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package VisitId;
+
+message VisitIdBusinessLogic {
+  string name = 1;
+  int32 cookieExpiration = 2;
+  bool contains_attribution_query_params = 3;
+  
+  oneof visit_id_source {
+    string visit_id = 4;
+    string cookie_name = 5;  // If provided, the visit_id will be parsed from this cookie
+  }
+  map<string, string> attribution_params = 6;
+}
+
+message AttributionParams {
+  map<string, string> params = 1;
+}
+
+// These are the valid keys for attribution_params
+message AttributionParamKeys {
+  string url_params = 1;
+  string utm_source = 2;
+  string utm_medium = 3;
+  string utm_campaign = 4;
+  string utm_term = 5;
+  string utm_content = 6;
+  string gclid = 7;
+  string fbclid = 8;
+  string msclkid = 9;
+  string dclid = 10;
+  string ad_id = 11;
+  string ad_name = 12;
+  string ad_group_id = 13;
+  string ad_group_name = 14;
+  string gtm_id = 15;
+  string gtm_event = 16;
+  string gtm_trigger = 17;
+  string gtm_variable = 18;
+  string gtm_data_layer = 19;
+  string gtm_container = 20;
+  string gtm_account = 21;
+  string gtm_workspace = 22;
+  string gtm_version = 23;
+  string gtm_environment = 24;
+}

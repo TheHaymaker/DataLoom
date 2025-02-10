@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package LogicExample;
+
+// Represents a logical condition that can be evaluated
+message Condition {
+  oneof condition_type {
+    ComparisonCondition comparison = 1;
+    AndCondition and = 2;
+    OrCondition or = 3;
+    NotCondition not = 4;
+    ExistsCondition exists = 5;
+  }
+}
+
+// Represents a comparison between a field and a value
+message ComparisonCondition {
+  string field = 1;
+  ComparisonOperator operator = 2;
+  Value value = 3;
+}
+
+// Represents a logical AND of multiple conditions
+message AndCondition {
+  repeated Condition conditions = 1;
+}
+
+// Represents a logical OR of multiple conditions
+message OrCondition {
+  repeated Condition conditions = 1;
+}
+
+// Represents a logical NOT of a condition
+message NotCondition {
+  Condition condition = 1;
+}
+
+// Represents checking if a field exists
+message ExistsCondition {
+  string field = 1;
+}
+
+// Supported comparison operators
+enum ComparisonOperator {
+  EQUALS = 0;
+  NOT_EQUALS = 1;
+  GREATER_THAN = 2;
+  LESS_THAN = 3;
+  CONTAINS = 4;
+  STARTS_WITH = 5;
+  ENDS_WITH = 6;
+}
+
+// Represents different types of values that can be compared
+message Value {
+  oneof value_type {
+    string string_value = 1;
+    int32 int_value = 2;
+    bool bool_value = 3;
+    double double_value = 4;
+  }
+}
+
+// Example usage: Rule for processing a user action
+message ProcessingRule {
+  string name = 1;
+  Condition condition = 2;
+  Action action = 3;
+}
+
+// Actions to take when a condition is met
+message Action {
+  oneof action_type {
+    TransformAction transform = 1;
+    NotifyAction notify = 2;
+    ValidateAction validate = 3;
+  }
+}
+
+message TransformAction {
+  string field = 1;
+  string transformation = 2;
+}
+
+message NotifyAction {
+  string message = 1;
+  NotificationLevel level = 2;
+}
+
+message ValidateAction {
+  string validation_rule = 1;
+  string error_message = 2;
+}
+
+enum NotificationLevel {
+  INFO = 0;
+  WARNING = 1;
+  ERROR = 2;
+}

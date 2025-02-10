@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package sample;
+
+message Event {
+  string event_id = 1;
+  int64 timestamp = 2;
+  string aggregate_id = 3;
+  
+  oneof event_type {
+    UserCreated user_created = 4;
+    UserUpdated user_updated = 5;
+    UserDeleted user_deleted = 6;
+  }
+}
+
+message UserCreated {
+  string email = 1;
+  string username = 2;
+}
+
+message UserUpdated {
+  map<string, string> changed_fields = 1;
+}
+
+message UserDeleted {
+  string reason = 1;
+}
