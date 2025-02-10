@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "generate:ts": "node scripts/generate-ts.js",
     "generate:ruby": "node scripts/generate-ruby.js",
-    "generate:data": "node scripts/generate-data.js"
+    "generate:data": "node scripts/generate-data.js",
+    "dataloom": "node scripts/cli.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +17,8 @@
     "ts-proto": "^2.6.1"
   },
   "devDependencies": {
+    "chalk": "^5.4.1",
+    "inquirer": "^12.4.1",
     "typescript": "^4.4.3"
   }
 }

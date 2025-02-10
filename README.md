@@ -14,6 +14,38 @@ Encapsulate business logic in a single place and distribute it across different 
 
 It focuses on generating TypeScript modules, Ruby gems, and SQL schemas from protobuf interfaces. The project is designed to provide a comprehensive solution for working with protobuf interfaces in various programming languages and databases (with Snowflake DDL, fivetran, and Tableau support in mind).
 
+## CLI Workflows
+
+DataLoom provides two main workflows through its CLI:
+
+### Create Protobuf Sample
+
+```mermaid
+graph TD
+    A[Start] --> B[Select 'Create a protobuf sample']
+    B --> C[Choose sample type]
+    C --> D[Enter file name]
+    D --> E[Specify directory]
+    E --> F[Generate .proto file]
+    F --> G[End]
+```
+
+This workflow allows you to create sample protobuf files from predefined templates including arrays, functions, objects, schemas, enums, maps, oneofs, nested messages, and various Google protobuf types.
+
+### Convert TypeScript to Protobuf
+
+```mermaid
+graph TD
+    A[Start] --> B[Select 'Convert a file to protobuf']
+    B --> C[Select source language]
+    C --> D[Provide input file path]
+    D --> E[Specify output .proto file]
+    E --> F[Convert to protobuf]
+    F --> G[End]
+```
+
+This workflow converts TypeScript functions into protobuf service definitions, automatically mapping TypeScript types to their protobuf equivalents.
+
 ## Prerequisites
 
 - `protoc` (Protocol Buffers compiler)
