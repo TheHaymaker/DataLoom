@@ -307,14 +307,7 @@ journey
       Discuss, define and use logic in silo: 1: Product,
    section Marketing logic
       Discuss, define and use logic in silo: 1: Marketing,
-```
-```mermaid
----
-title: "Without DataLoom / IR"
-config:
-  theme: dark
----
-journey
+
    section Backend Engineering
       Copy/paste logic: 1: Engineering,
       Manual mapping: 1: Engineering,
@@ -323,14 +316,7 @@ journey
       Copy/paste logic: 1: Engineering,
       Manual mapping: 1: Engineering,
       Uneven data quality: 1: Engineering,
-```
-```mermaid
----
-title: "Without DataLoom / IR"
-config:
-  theme: dark
----
-journey
+
    section Data
    Copy/paste logic: 1: Data,
       Manual mapping: 1: Data,
@@ -361,33 +347,16 @@ journey
       Refine: 5: Stakeholders, Engineering, Product, Data, DataLoom,
       Validate: 5: Stakeholders, Engineering, Product, Data, DataLoom,
       Update: 5: Stakeholders, Engineering, Product, Data, DataLoom,   
-```
-```mermaid
----
-title: With DataLoom / IR workflow
-config:
-  theme: dark
----
-journey
+
    section Distribute Business Logic
       Compile Targets: 5: Engineering, Data, DataLoom,
       Publish compiled packages: 5:  Engineering, DataLoom,
       Communicate Changelog: 5: Stakeholders, Engineering, Product, Data, DataLoom,
  
-    
-```
-```mermaid
----
-title: With DataLoom / IR workflow
-config:
-  theme: dark
----
-journey
    section Consume Business Logic
       Import target packages: 5: Engineering, Data, Marketing,
       Consume classes, schemas, etc: 5:  Engineering, Data,
 ```
-
 
 ## To Do
 
