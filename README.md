@@ -14,35 +14,87 @@ Encapsulate business logic in a single place and distribute it across different 
 
 It focuses on generating TypeScript modules, Ruby gems, and SQL schemas from protobuf interfaces. The project is designed to provide a comprehensive solution for working with protobuf interfaces in various programming languages and databases (with Snowflake DDL, fivetran, and Tableau support in mind).
 
+## IR Workflow
+
+### Before DataLoom
+
+```mermaid
+---
+title: "Without DataLoom/IR: unregulated silos are inevitable"
+config:
+  theme: dark
+---
+journey
+   section Engineering Logic
+      Discuss, define and use logic in silo: 1: Engineering,
+   section Data logic
+      Discuss, define and use logic in silo: 1: Data,
+   section Product logic
+      Discuss, define and use logic in silo: 1: Product,
+   section Marketing logic
+      Discuss, define and use logic in silo: 1: Marketing,
+   
+   section Backend Engineering
+      Copy/paste logic: 1: Engineering,
+      Manual mapping: 1: Engineering,
+      Uneven data quality: 1: Engineering,
+   section Frontend Engineering
+      Copy/paste logic: 1: Engineering,
+      Manual mapping: 1: Engineering,
+      Uneven data quality: 1: Engineering,
+   section Data
+   Copy/paste logic: 1: Data,
+      Manual mapping: 1: Data,
+      Uneven data quality: 1: Data,
+   section Database I/O & Querying
+      Copy/paste logic: 1: Engineering, Data,
+      Manual mapping: 1: Engineering, Data,
+      Uneven data quality: 1: Engineering, Data,
+   section Analytics & Reporting
+      Copy/paste logic: 1: Engineering, Data, Marketing,
+      Manual mapping: 1: Engineering, Data, Marketing,
+      Uneven data quality: 1: Engineering, Data, Marketing,
+```
+
+### After DataLoom
+
+```mermaid
+---
+title: With DataLoom / IR workflow
+config:
+  theme: dark
+---
+journey
+   section Create Business Logic
+            Discuss: 4: Stakeholders,
+            Define: 5: Stakeholders, Engineering, Product, Data, DataLoom,
+            Capture: 5: Data, DataLoom,
+            Refine: 5: Stakeholders, Engineering, Product, Data, DataLoom,
+            Validate: 5: Stakeholders, Engineering, Product, Data, DataLoom,
+   
+            Update: 5: Stakeholders, Engineering, Product, Data, DataLoom,
+
+      section Distribute Business Logic
+         Compile Targets: 5: Engineering, Data, DataLoom,
+         Publish compiled packages: 5:  Engineering, DataLoom,
+         Communicate Changelog: 5: Stakeholders, Engineering, Product, Data, DataLoom,
+ 
+      section Consume Business Logic
+         Import target packages: 5: Engineering, Data, Marketing,
+         Consume classes, schemas, etc: 5:  Engineering, Data,
+```
+
 ## CLI Workflows
 
 DataLoom provides two main workflows through its CLI:
 
 ### Create Protobuf Sample
 
-```mermaid
-graph TD
-    A[Start] --> B[Select 'Create a protobuf sample']
-    B --> C[Choose sample type]
-    C --> D[Enter file name]
-    D --> E[Specify directory]
-    E --> F[Generate .proto file]
-    F --> G[End]
-```
-
 This workflow allows you to create sample protobuf files from predefined templates including arrays, functions, objects, schemas, enums, maps, oneofs, nested messages, and various Google protobuf types.
 
 ### Convert TypeScript to Protobuf
 
-```mermaid
-graph TD
-    A[Start] --> B[Select 'Convert a file to protobuf']
-    B --> C[Select source language]
-    C --> D[Provide input file path]
-    D --> E[Specify output .proto file]
-    E --> F[Convert to protobuf]
-    F --> G[End]
-```
+TBD
 
 This workflow converts TypeScript functions into protobuf service definitions, automatically mapping TypeScript types to their protobuf equivalents.
 
