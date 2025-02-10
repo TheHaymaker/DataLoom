@@ -6,6 +6,12 @@ DataLoom weaves together different data representations and business logic acros
 
 Intermediate Representation (IR) is a common language for representing data models and business logic. It's a core component of the DataLoom.
 
+Haven't heard of IR before? 
+
+Not sure what a protobuf is or how to map your schemas to a protobuf?
+
+We got you covered. Our CLI docs empower you with sample protobuf defintions for common problems and data structures. The CLI will help guide you and give you the tools to start defining your data models in protobuf format.
+
 ## Overview
 
 This project is heavily inspired by [Morphir](https://github.com/finos/morphir) - albeit at a much smaller and more localized scale.
