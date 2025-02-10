@@ -27,6 +27,106 @@ Encapsulate business logic in a single place and distribute it across different 
 
 It focuses on generating TypeScript modules, Ruby gems, and SQL schemas from protobuf interfaces. The project is designed to provide a comprehensive solution for working with protobuf interfaces in various programming languages and databases (with Snowflake DDL, fivetran, and Tableau support in mind).
 
+## Prerequisites
+
+- `protoc` (Protocol Buffers compiler)
+- `protoc-gen-ts` (TypeScript plugin for `protoc`)
+- `ruby` (for Ruby gem generation)
+- `node` (see .nvmrc for LTS version)
+
+## Setup
+
+For Ruby gem generation:
+
+```sh
+# Install protobuf compiler
+brew install protobuf
+```
+
+AND
+
+```sh
+# Install google-protobuf gem in Gemfile
+bundle install
+```
+
+OR
+
+```sh
+# Install ruby protobuf gem
+gem install google-protobuf
+```
+
+For TypeScript generation:
+
+```sh
+npm install
+```
+
+## CLI Workflows
+
+DataLoom tries to empower you to start using the protobuf-as-IR as quickly as possible through its CLI:
+
+### Create Protobuf Sample
+
+This workflow allows you to create sample protobuf files from predefined templates. These templates cover common use cases that prioritize the shape, structure and hierarhcy of the data.
+
+https://github.com/user-attachments/assets/34531a3e-ba84-49e7-959a-2897a53e6862
+
+## Generate Usable Outputs from Intermediate Representation (IR)
+
+Run the following script to generate the source code targets from the IR protobuf schema. We use the `protoc` compiler to generate the TypeScript and Ruby code from the protobuf schema. We chose to abstract these bash commands into a Nodee script to make it easier to run and maintain (avoid forcing users to modify local file permissions to make the bash scripts executable, for instance). The node scripts should just work.
+
+
+To generate new targets, run the following script:
+
+```sh
+npm run generate:all
+```
+
+### Generate TypeScript Modules
+
+Run the following script to generate TypeScript modules from the protobuf schema:
+
+```sh
+npm run generate:ts
+```
+
+The generated files will be located in the `generated/ts` directory.
+
+
+### Generate Ruby Gems
+
+Run the following script to generate Ruby gems from the protobuf schema:
+
+```sh
+npm run generate:ruby
+```
+
+The generated files will be located in the `generated/ruby` directory.
+
+
+### Generate Data Warehouse Assets
+
+Run the following script to generate data warehouse-friendly formats from the protobuf schema:
+
+```sh
+npm run generate:data
+```
+
+This generates:
+
+1. Snowflake DDL files (`*.snowflake.sql`):
+   - Tables for storing protobuf message data
+   - Flattened views optimized for Tableau
+   - Lookup tables for enum values
+
+2. JSON Schema files (`*.schema.json`):
+   - Fivetran-compatible schemas
+   - Proper type mappings for all fields
+
+The generated files will be located in the `generated/data` directory.
+
 ## Quick Example
 
 Using an IR representation of a data model, we can generate a variety of outputs, including TypeScript modules, Ruby gems, and SQL schemas.
@@ -286,107 +386,6 @@ journey
       Import target packages: 5: Engineering, Data, Marketing,
       Consume classes, schemas, etc: 5:  Engineering, Data,
 ```
-
-## CLI Workflows
-
-DataLoom provides two main workflows through its CLI:
-
-### Create Protobuf Sample
-
-This workflow allows you to create sample protobuf files from predefined templates. These templates cover common use cases that prioritize the shape, structure and hierarhcy of the data.
-
-https://github.com/user-attachments/assets/34531a3e-ba84-49e7-959a-2897a53e6862
-
-## Prerequisites
-
-- `protoc` (Protocol Buffers compiler)
-- `protoc-gen-ts` (TypeScript plugin for `protoc`)
-- `ruby` (for Ruby gem generation)
-- `node` (see .nvmrc for LTS version)
-
-## Setup
-
-For Ruby gem generation:
-
-```sh
-# Install protobuf compiler
-brew install protobuf
-```
-
-AND
-
-```sh
-# Install google-protobuf gem in Gemfile
-bundle install
-```
-
-OR
-
-```sh
-# Install ruby protobuf gem
-gem install google-protobuf
-```
-
-For TypeScript generation:
-
-```sh
-npm install
-```
-
-
-## Generate Usable Outputs from Intermediate Representation (IR)
-
-Run the following script to generate the source code targets from the IR protobuf schema. We use the `protoc` compiler to generate the TypeScript and Ruby code from the protobuf schema. We chose to abstract these bash commands into a Nodee script to make it easier to run and maintain (avoid forcing users to modify local file permissions to make the bash scripts executable, for instance). The node scripts should just work.
-
-
-To generate new targets, run the following script:
-
-```sh
-npm run generate:all
-```
-
-### Generate TypeScript Modules
-
-Run the following script to generate TypeScript modules from the protobuf schema:
-
-```sh
-npm run generate:ts
-```
-
-The generated files will be located in the `generated/ts` directory.
-
-
-### Generate Ruby Gems
-
-Run the following script to generate Ruby gems from the protobuf schema:
-
-```sh
-npm run generate:ruby
-```
-
-The generated files will be located in the `generated/ruby` directory.
-
-
-### Generate Data Warehouse Assets
-
-Run the following script to generate data warehouse-friendly formats from the protobuf schema:
-
-```sh
-npm run generate:data
-```
-
-This generates:
-
-1. Snowflake DDL files (`*.snowflake.sql`):
-   - Tables for storing protobuf message data
-   - Flattened views optimized for Tableau
-   - Lookup tables for enum values
-
-2. JSON Schema files (`*.schema.json`):
-   - Fivetran-compatible schemas
-   - Proper type mappings for all fields
-
-The generated files will be located in the `generated/data` directory.
 
 
 ## To Do
