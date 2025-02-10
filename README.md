@@ -65,7 +65,7 @@ npm install
 
 ## CLI Workflows
 
-DataLoom tries to empower you to start using the protobuf-as-IR as quickly as possible through its CLI:
+DataLoom tries to empower you to start using `protobufs-as-intermediate-representation` quickly via its CLI:
 
 ### Create Protobuf Sample
 
