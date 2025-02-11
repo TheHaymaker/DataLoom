@@ -256,7 +256,7 @@ function createBaseVisitIdBusinessLogic(): VisitIdBusinessLogic {
 }
 ```
 
-When can then be used in a TypeScript application as follows:
+Which can then be used in a TypeScript application as follows:
 
 ```typescript
 import { VisitIdBusinessLogic, AttributionParamKeys } from './generated/ts/visitIdBusinessLogic';
