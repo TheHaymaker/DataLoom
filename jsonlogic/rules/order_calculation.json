@@ -1,0 +1,40 @@
+{
+  "description": "Calculate order total with tax and discounts",
+  "rules": {
+    "*": [
+      {
+        "+": [
+          { "reduce": [
+            { "var": "order.items" },
+            { "+": [
+              { "*": [
+                { "var": "current.price" },
+                { "var": "current.quantity" }
+              ]},
+              { "var": "accumulator" }
+            ]},
+            0
+          ]},
+          { "-": [
+            1,
+            { "var": "order.discount_percentage" }
+          ]}
+        ]
+      },
+      { "+": [
+        1,
+        { "var": "order.tax_rate" }
+      ]}
+    ]
+  },
+  "example_data": {
+    "order": {
+      "items": [
+        { "price": 10, "quantity": 2 },
+        { "price": 20, "quantity": 1 }
+      ],
+      "discount_percentage": 0.1,
+      "tax_rate": 0.08
+    }
+  }
+}

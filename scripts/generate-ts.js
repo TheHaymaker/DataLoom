@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-const { execSync } = require('child_process');
-const path = require('path');
+const { execSync } = require('node:child_process');
+const path = require('node:path');
 
 try {
   // Assuming the proto files are in the protos directory
   const protoDir = path.join(__dirname, '..', 'protos');
-  const outDir = path.join(__dirname, '..', 'generated', 'ts');
+  const outDir = path.join(__dirname, '..', 'generated', 'ts', 'protobuf');
 
   // Create output directory if it doesn't exist
   execSync(`mkdir -p ${outDir}`);

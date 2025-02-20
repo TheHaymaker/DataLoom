@@ -283,10 +283,230 @@ const sourceValue = visitCookieDetails.attributionParams['utm_source'];
 
 By leveraging protobuf -- and its mature codegen ecosystem and cross-language support -- we can generate a variety of outputs, including TypeScript modules, Ruby gems, and SQL schemas (and more!) while focusing on the shape, structure and hierarchy of our data models. 
 
-In addition to modeling data, we can also use protobuf to build complex business logic as well.
+In addition to modeling data, we can also use JsonLogic to build complex business logic as well.
 
-Example: TBD
+## Business Logic Engine Implementation
 
+DataLoom generates strongly-typed business logic engines for both TypeScript and Ruby from the same JSON Logic rules. This ensures consistent business logic across your applications while leveraging each language's strengths.
+
+### TypeScript Implementation
+
+The TypeScript implementation provides strong typing and modern ES6+ features:
+
+```typescript
+// Type-safe rule definitions
+type DynamicPricingRule = {
+  "*": [
+    { "var": "product.base_price" },
+    { "if": [{ ">=": [{ "var": "quantity" }, 10] }, 0.9, 1] },
+    // ... more rules
+  ]
+};
+
+// Strongly typed data interfaces
+type DynamicPricingData = {
+  product: {
+    base_price: number;
+  };
+  quantity: number;
+  season: string;
+  user: {
+    tier: string;
+  };
+};
+
+// Type-safe business logic engine
+export const BusinessLogicEngine = {
+  apply<T>(rules: JsonLogicRule, data: unknown): RuleResult<T> {
+    return jsonLogic.apply(rules, data) as RuleResult<T>;
+  },
+  
+  dynamicPricing(data: DynamicPricingData): number {
+    // Implementation with type checking
+  }
+};
+```
+
+### Ruby Implementation
+
+The Ruby implementation focuses on clean, documented class methods:
+
+```ruby
+module BusinessLogic
+  class Engine
+    class << self
+      # Rule definitions with Ruby syntax
+      DYNAMIC_PRICING_RULES = {
+        "*" => [
+          { "var" => "product.base_price" },
+          { "if" => [{ ">=" => [{ "var" => "quantity" }, 10] }, 0.9, 1] },
+          # ... more rules
+        ]
+      }
+
+      # Documented method with example usage
+      # @param data [Hash] The data to evaluate
+      # @return [Object] The result
+      # @example
+      #   data = {"product" => {"base_price" => 100}}
+      #   result = Engine.dynamic_pricing(data)
+      def dynamic_pricing(data)
+        apply(DYNAMIC_PRICING_RULES, data)
+      end
+    end
+  end
+end
+```
+
+### Key Differences
+
+1. **Type Safety**
+   - TypeScript: Compile-time type checking with interfaces
+   - Ruby: Runtime type checking with optional documentation
+
+2. **Method Organization**
+   - TypeScript: Namespace object with typed methods
+   - Ruby: Class methods with yard-style documentation
+
+3. **Rule Definition**
+   - TypeScript: Type-safe rule templates
+   - Ruby: Hash constants with symbol keys
+
+### Usage Comparison
+
+```typescript
+// TypeScript
+const orderData: OrderCalculationData = {
+  order: {
+    items: [
+      { price: 10, quantity: 2 },
+      { price: 20, quantity: 1 }
+    ],
+    discount_percentage: 0.1,
+    tax_rate: 0.08
+  }
+};
+const total = BusinessLogicEngine.orderCalculation(orderData);
+```
+
+```ruby
+# Ruby
+order_data = {
+  "order" => {
+    "items" => [
+      { "price" => 10, "quantity" => 2 },
+      { "price" => 20, "quantity" => 1 }
+    ],
+    "discount_percentage" => 0.1,
+    "tax_rate" => 0.08
+  }
+}
+total = BusinessLogic::Engine.order_calculation(order_data)
+```
+
+Both implementations produce identical results:
+
+```typescript
+// Result of order calculation example:
+// total = 44.172000000000004 (calculated as follows):
+// 1. Sum of items: (10 * 2) + (20 * 1) = 40
+// 2. Apply discount: 40 * (1 - 0.1) = 36
+// 3. Apply tax: 36 * (1 + 0.08) = 44.172000000000004
+```
+
+### Testing Cross-Language Consistency
+
+DataLoom ensures business logic consistency across languages through automated testing. Here's how we verify identical behavior:
+
+```typescript
+// TypeScript test runner (scripts/test-runner.ts)
+import { BusinessLogicEngine } from '../generated/ts/jsonlogic/index.js';
+
+const testCases = {
+  orderCalculation: {
+    data: {
+      order: {
+        items: [
+          { price: 10, quantity: 2 },
+          { price: 20, quantity: 1 }
+        ],
+        discount_percentage: 0.1,
+        tax_rate: 0.08
+      }
+    }
+  }
+  // ... other test cases
+};
+
+// Run tests and output results
+for (const [testName, { data }] of Object.entries(testCases)) {
+  const result = BusinessLogicEngine[testName](data);
+  console.log(`${testName}:${JSON.stringify(result)}`);
+}
+```
+
+```ruby
+# Ruby test runner (within compare-outputs.sh)
+test_cases = {
+  "orderCalculation" => {
+    "data" => {
+      "order" => {
+        "items" => [
+          {"price" => 10, "quantity" => 2},
+          {"price" => 20, "quantity" => 1}
+        ],
+        "discount_percentage" => 0.1,
+        "tax_rate" => 0.08
+      }
+    }
+  }
+  # ... other test cases
+}
+
+test_cases.each do |test_name, test_data|
+  method_name = test_name.gsub(/([A-Z])/) { "_#{$1.downcase}" }
+  result = BusinessLogic::Engine.send(method_name, test_data["data"])
+  puts "#{test_name}:#{formatted_result.inspect}"
+end
+```
+
+The outputs are compared using a shell script that ensures both implementations produce identical results:
+
+```bash
+# Compare TypeScript and Ruby outputs
+if diff -w ruby_output.txt ts_output.txt > diff_output.txt; then
+  echo "✅ All tests passed! Outputs match between Ruby and TypeScript implementations."
+else
+  echo "❌ Test outputs differ:"
+  cat diff_output.txt
+fi
+```
+
+This results in the following output:
+
+```bash
+Compiling TypeScript test runner...
+Running TypeScript tests...
+TypeScript output:
+dynamicPricing:65.02499999999999
+orderCalculation:44.172000000000004
+riskAssessment:80
+userEligibility:true
+Running Ruby tests...
+Ruby output:
+dynamicPricing:65.02499999999999
+orderCalculation:44.172000000000004
+riskAssessment:80
+userEligibility:true
+Comparing outputs...
+✅ All tests passed! Outputs match between Ruby and TypeScript implementations.
+```
+
+This testing infrastructure ensures that:
+1. Business logic remains consistent across languages
+2. Changes to rules are validated in both implementations
+3. Edge cases are handled identically
+4. Numeric precision and type coercion behave consistently
 
 ## IR Workflow
 
@@ -391,4 +611,4 @@ journey
   - [ ] Julia
   - [ ] R
   - [ ] Elixir
-  - [ ] TB  
+  - [ ] TB

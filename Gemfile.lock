@@ -20,6 +20,7 @@ GEM
     google-protobuf (4.29.3-x86_64-linux)
       bigdecimal
       rake (>= 13)
+    json_logic (0.4.7)
     rake (13.2.1)
 
 PLATFORMS
@@ -32,6 +33,7 @@ PLATFORMS
 
 DEPENDENCIES
   google-protobuf (~> 4.29)
+  json_logic (~> 0.4.7)
 
 BUNDLED WITH
    2.6.3

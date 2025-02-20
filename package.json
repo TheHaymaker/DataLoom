@@ -3,17 +3,22 @@
   "version": "1.0.0",
   "description": "A project that translates and generates protobuf interfaces into both TypeScript modules and Ruby gems.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "generate:ts": "node scripts/generate-ts.js",
     "generate:ruby": "node scripts/generate-ruby.js",
     "generate:data": "node scripts/generate-data.js",
-    "generate:all": "npm run generate:ts && npm run generate:ruby && npm run generate:data",
+    "generate:jsonlogic:ts": "node scripts/generate-jsonlogic-ts.js",
+    "generate:jsonlogic:ruby": "node scripts/generate-jsonlogic-ruby.js",
+    "generate:jsonlogic:all": "npm run generate:jsonlogic:ts && npm run generate:jsonlogic:ruby",
+    "generate:all": "npm run generate:ts && npm run generate:ruby && npm run generate:data && npm run generate:jsonlogic:all",
     "dataloom": "node scripts/cli.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "json-logic-js": "^2.0.5",
     "protobufjs": "^6.11.2",
     "ts-proto": "^2.6.1"
   },

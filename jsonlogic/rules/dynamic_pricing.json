@@ -1,0 +1,41 @@
+{
+  "description": "Calculate product price based on quantity, season, and user tier",
+  "rules": {
+    "*": [
+      { "var": "product.base_price" },
+      { "if": [
+        { ">=": [{ "var": "quantity" }, 10] },
+        0.9,
+        1.0
+      ]},
+      { "if": [
+        { "in": [{ "var": "season" }, ["summer", "winter"]] },
+        0.85,
+        1.0
+      ]},
+      { "if": [
+        { "==": [{ "var": "user.tier" }, "gold"] },
+        0.85,
+        { "if": [
+          { "==": [{ "var": "user.tier" }, "silver"] },
+          0.90,
+          { "if": [
+            { "==": [{ "var": "user.tier" }, "bronze"] },
+            0.95,
+            1.0
+          ]}
+        ]}
+      ]}
+    ]
+  },
+  "example_data": {
+    "product": {
+      "base_price": 100
+    },
+    "quantity": 15,
+    "season": "summer",
+    "user": {
+      "tier": "gold"
+    }
+  }
+}

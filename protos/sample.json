@@ -1,0 +1,60 @@
+{
+  "description": "Determine if user is eligible for premium features",
+  "rules": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "user.subscription_months"
+          },
+          3
+        ]
+      },
+      {
+        ">=": [
+          {
+            "var": "user.activity_score"
+          },
+          75
+        ]
+      },
+      {
+        "or": [
+          {
+            "==": [
+              {
+                "var": "user.tier"
+              },
+              "premium"
+            ]
+          },
+          {
+            ">=": [
+              {
+                "var": "user.referrals"
+              },
+              5
+            ]
+          }
+        ]
+      },
+      {
+        "==": [
+          {
+            "var": "user.account_status"
+          },
+          "active"
+        ]
+      }
+    ]
+  },
+  "example_data": {
+    "user": {
+      "subscription_months": 6,
+      "activity_score": 85,
+      "tier": "standard",
+      "referrals": 7,
+      "account_status": "active"
+    }
+  }
+}

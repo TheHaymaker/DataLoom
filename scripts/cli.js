@@ -1,9 +1,18 @@
-const inquirer = require('inquirer').default;
-const path = require('path');
-const fs = require('fs');
-const ck = require('chalk').Chalk;
+import inquirer from 'inquirer';
+import path from 'node:path';
+import fs from 'node:fs';
+import * as ck from 'chalk';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 
-const chalk = new ck({level: 3})
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const loadJsonFile = (filePath) => {
+  return JSON.parse(fs.readFileSync(path.resolve(__dirname, filePath), 'utf8'));
+};
+
+const chalk = new ck.Chalk({level: 3})
 
 // Cleanup function to handle graceful shutdown
 function cleanup() {
@@ -16,7 +25,7 @@ function cleanup() {
 process.on('SIGINT', cleanup);
 process.on('SIGTERM', cleanup);
 
-const samples = {
+const protoSamples = {
   eventSourcing: {
     description: 'Pattern for capturing all changes to an application state as a sequence of events.',
     content: `syntax = "proto3";
@@ -273,21 +282,60 @@ message StatusTransition {
   }
 };
 
+const jsonLogicSamples = {
+  orderCalculation: {
+    description: 'Calculate order total with tax and discounts',
+    content: loadJsonFile('../jsonlogic/rules/order_calculation.json'),
+  },
+  userEligibility: {
+    description: 'Determine if user is eligible for premium features',
+    content: loadJsonFile('../jsonlogic/rules/user_eligibility.json'),
+  },
+  dynamicPricing: {
+    description: 'Calculate product price based on quantity, season, and user tier',
+    content: loadJsonFile('../jsonlogic/rules/dynamic_pricing.json'),
+  },
+  riskAssessment: {
+    description: 'Calculate risk score based on multiple factors',
+    content: loadJsonFile('../jsonlogic/rules/risk_assessment.json'),
+  }
+};
+
 const questions = [
+  {
+    type: 'list',
+    name: 'generatorType',
+    message: chalk.bold.underline.blueBright('What type of sample would you like to generate?'),
+    choices: [
+      { name: 'Protobuf Data Model', value: 'proto' },
+      { name: 'JsonLogic Business Rules', value: 'jsonlogic' }
+    ]
+  },
   {
     type: 'list',
     name: 'sampleType',
     message: chalk.bold.underline.blueBright('Select a protobuf data modeling pattern to generate:'),
-    choices: Object.keys(samples).map(key => ({
-      name: `${chalk.yellowBright(key)} - ${chalk.grey(samples[key].description)}`,
+    choices: Object.keys(protoSamples).map(key => ({
+      name: `${chalk.yellowBright(key)} - ${chalk.grey(protoSamples[key].description)}`,
       value: key
-    }))
+    })),
+    when: (answers) => answers.generatorType === 'proto'
+  },
+  {
+    type: 'list',
+    name: 'sampleType',
+    message: chalk.bold.underline.blueBright('Select a JsonLogic business rule to generate:'),
+    choices: Object.keys(jsonLogicSamples).map(key => ({
+      name: `${chalk.yellowBright(key)} - ${chalk.grey(jsonLogicSamples[key].description)}`,
+      value: key
+    })),
+    when: (answers) => answers.generatorType === 'jsonlogic'
   },
   {
     type: 'input',
     name: 'fileName',
-    message: chalk.magenta('File name for your protobuf sample:'),
-    default: 'sample',
+    message: (answers) => chalk.magenta(`File name for your ${answers.generatorType === 'proto' ? 'protobuf' : 'JsonLogic'} sample:`),
+    default: (answers) => answers.generatorType === 'proto' ? 'sample' : answers.sampleType,
     validate: (input) => {
       // Strip any file extension if user adds one
       const nameWithoutExt = path.parse(input).name;
@@ -300,8 +348,8 @@ const questions = [
   {
     type: 'input',
     name: 'directory',
-    message: chalk.dim.blue('The directory in which to save your protobuf sample:'),
-    default: './protos',
+    message: (answers) => chalk.dim.blue(`The directory in which to save your ${answers.generatorType === 'proto' ? 'protobuf' : 'JsonLogic'} sample:`),
+    default: (answers) => answers.generatorType === 'proto' ? './protos' : './jsonlogic/rules',
     validate: (input) => {
       try {
         const absolutePath = path.resolve(input);
@@ -334,21 +382,29 @@ function validatePath(directory) {
 console.log(`${chalk.bold.bgBlack.whiteBright('DataLoom. Your source of truth for critical business logic.')} \n`)
 inquirer.prompt(questions)
 .then((answers) => {
-  const { sampleType, fileName, directory } = answers;
-  const protoContent = samples[sampleType].content;
-  
-  // Always use name without extension
+  const { generatorType, sampleType, fileName, directory } = answers;
   const nameWithoutExt = path.parse(fileName).name;
   const absolutePath = path.resolve(directory);
-  const filePath = path.join(absolutePath, `${nameWithoutExt}.proto`);
   
   // Create directory if it doesn't exist
   if (!fs.existsSync(absolutePath)) {
     fs.mkdirSync(absolutePath, { recursive: true });
   }
   
-  fs.writeFileSync(filePath, protoContent);
-  console.log(chalk.bold.grey(`\nProtobuf file ${chalk.magentaBright(`${nameWithoutExt}.proto`)} has been created at ${chalk.yellow(filePath)}. 🤙🏻 \n`));
+  if (generatorType === 'proto') {
+    const protoContent = protoSamples[sampleType].content;
+    const filePath = path.join(absolutePath, `${nameWithoutExt}.proto`);
+    
+    fs.writeFileSync(filePath, protoContent);
+    console.log(chalk.bold.grey(`\nProtobuf file ${chalk.magentaBright(`${nameWithoutExt}.proto`)} has been created at ${chalk.yellow(filePath)}. 🤙🏻 \n`));
+  } else {
+    const jsonLogicContent = JSON.stringify(jsonLogicSamples[sampleType].content, null, 2);
+    const filePath = path.join(absolutePath, `${nameWithoutExt}.json`);
+    
+    fs.writeFileSync(filePath, jsonLogicContent);
+    console.log(chalk.bold.grey(`\nJsonLogic file ${chalk.magentaBright(`${nameWithoutExt}.json`)} has been created at ${chalk.yellow(filePath)}. 🤙🏻 \n`));
+  }
+  
   console.log(chalk.bold.bgBlack.whiteBright('Thank you for using DataLoom 😘'));
 })
 .catch((error) => {

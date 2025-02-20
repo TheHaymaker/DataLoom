@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 const protobuf = require('protobufjs');
-const path = require('path');
-const fs = require('fs');
+const path = require('node:path');
+const fs = require('node:fs');
 
 // Proto to SQL type mapping
 const protoToSnowflake = {
@@ -30,7 +30,7 @@ function generateJsonSchema(root, messageName) {
   const message = root.lookupType(messageName);
   const properties = {};
   
-  message.fieldsArray.forEach(field => {
+  for (const field of message.fieldsArray) {
     const type = field.type;
     if (field.map) {
       properties[field.name] = {
@@ -51,7 +51,7 @@ function generateJsonSchema(root, messageName) {
         type: protoToJsonSchema[type] || 'string'
       };
     }
-  });
+  }
 
   return {
     $schema: 'http://json-schema.org/draft-07/schema#',
@@ -69,11 +69,14 @@ function generateSnowflakeTable(root, messageName) {
     const type = field.type;
     if (field.map) {
       return `  ${field.name} VARIANT`; // Store maps as VARIANT
-    } else if (field.repeated) {
-      return `  ${field.name} ARRAY`; // Store arrays as ARRAY
-    } else {
-      return `  ${field.name} ${protoToSnowflake[type] || 'VARCHAR'}`;
     }
+    
+    if (field.repeated) {
+      return `  ${field.name} ARRAY`; // Store arrays as ARRAY
+    } 
+
+    return `  ${field.name} ${protoToSnowflake[type] || 'VARCHAR'}`;
+    
   });
 
   sql += columns.join(',\n');
@@ -86,11 +89,13 @@ function generateSnowflakeTable(root, messageName) {
     const viewColumns = message.fieldsArray.map(field => {
       if (field.map) {
         return `  f.value::string as ${field.name}`;
-      } else if (field.repeated) {
-        return `  f.value as ${field.name}`;
-      } else {
-        return `  ${field.name}`;
       }
+      
+      if (field.repeated) {
+        return `  f.value as ${field.name}`;
+      }
+        return `  ${field.name}`;
+      
     });
 
     sql += viewColumns.join(',\n');
@@ -115,7 +120,7 @@ try {
     // Generate for each message type
     const messages = ['business_logic.UrlAnalyticsRequest', 'business_logic.UrlAnalyticsResponse'];
     
-    messages.forEach(messageName => {
+    for (const messageName of messages) {
       // Generate JSON Schema
       const jsonSchema = generateJsonSchema(root, messageName);
       fs.writeFileSync(
@@ -129,7 +134,7 @@ try {
         path.join(outDir, `${messageName.split('.')[1]}.snowflake.sql`),
         snowflakeSQL
       );
-    });
+    }
 
     // Generate enum table for AnalyticsParams
     const enumType = root.lookupEnum('business_logic.AnalyticsParams');
@@ -143,7 +148,7 @@ try {
     const values = Object.entries(enumType.values)
       .map(([name, id]) => `  (${id}, '${name}')`)
       .join(',\n');
-    enumSQL += values + ';\n';
+    enumSQL += `${values};\n`;
 
     fs.writeFileSync(
       path.join(outDir, 'AnalyticsParams.snowflake.sql'),
@@ -151,8 +156,7 @@ try {
     );
 
     console.log('Data warehouse files generated successfully!');
-  });
-} catch (error) {
+  });} catch (error) {
   console.error('Error generating data warehouse files:', error);
   process.exit(1);
 }

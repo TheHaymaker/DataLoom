@@ -1,0 +1,71 @@
+{
+  "description": "Calculate risk score based on multiple factors",
+  "rules": {
+    "reduce": [
+      [
+        {
+          "if": [
+            { ">=": [{ "var": "credit_score" }, 750] },
+            10,
+            {
+              "if": [
+                { ">=": [{ "var": "credit_score" }, 650] },
+                20,
+                30
+              ]
+            }
+          ]
+        },
+        {
+          "if": [
+            { "==": [{ "var": "late_payments" }, 0] },
+            10,
+            {
+              "if": [
+                { "<=": [{ "var": "late_payments" }, 2] },
+                20,
+                30
+              ]
+            }
+          ]
+        },
+        {
+          "if": [
+            { ">=": [{ "var": "years_employed" }, 5] },
+            10,
+            {
+              "if": [
+                { ">=": [{ "var": "years_employed" }, 2] },
+                20,
+                30
+              ]
+            }
+          ]
+        },
+        {
+          "if": [
+            { "<=": [{ "var": "debt_to_income" }, 0.3] },
+            10,
+            {
+              "if": [
+                { "<=": [{ "var": "debt_to_income" }, 0.4] },
+                20,
+                30
+              ]
+            }
+          ]
+        }
+      ],
+      {
+        "+": [{ "var": "current" }, { "var": "accumulator" }]
+      },
+      0
+    ]
+  },
+  "example_data": {
+    "credit_score": 720,
+    "late_payments": 1,
+    "years_employed": 3,
+    "debt_to_income": 0.35
+  }
+}
