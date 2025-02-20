@@ -289,6 +289,14 @@ In addition to modeling data, we can also use JsonLogic to build complex busines
 
 DataLoom generates strongly-typed business logic engines for both TypeScript and Ruby from the same JSON Logic rules. This ensures consistent business logic across your applications while leveraging each language's strengths.
 
+It accomplishes this by using a common business-logic format [JsonLogic](https://jsonlogic.com), and exposes sample implementations (as we do in protobufs) to get you started.
+
+
+https://github.com/user-attachments/assets/58d16611-7eb2-416c-a540-e017f3e548ab
+
+As a user, you're then able to `apply` the rules of that business logic directly to your data. Sample implementations break it down for you below.
+
+
 ### TypeScript Implementation
 
 The TypeScript implementation provides strong typing and modern ES6+ features:
